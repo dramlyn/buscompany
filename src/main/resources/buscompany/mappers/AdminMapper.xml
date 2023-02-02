@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="buscompany.mappers.AdminMapper">
+
+
+    <resultMap id="resultAdmin" type="buscompany.model.Admin">
+        <id property="id" column="id"/>
+        <result property="firstName" column="firstname"/>
+        <result property="lastName" column="lastname"/>
+        <result property="patronymic" column="patronymic"/>
+        <result property="login" column="login"/>
+        <result property="password" column="password"/>
+        <result property="position" column="position"/>
+    </resultMap>
+
+    <select id="getAdminByLoginAndPassword" resultMap="resultAdmin" parameterType="java.lang.String">
+        SELECT `user`.id, firstname, lastname, patronymic, login, `password`, `admin`.`position`
+        FROM `user`
+        LEFT JOIN `admin` ON `admin`.id = `user`.id
+        WHERE LOWER(login) = LOWER(#{login}) AND `password` = #{password}
+    </select>
+
+    <select id="getAdminById" resultMap="resultAdmin" parameterType="java.lang.Integer">
+        SELECT `user`.id, firstname, lastname, patronymic, login, `password`, `admin`.`position`
+        FROM `user`
+        LEFT JOIN `admin` ON `admin`.id = `user`.id
+        WHERE `user`.id = #{id};
+    </select>
+
+</mapper>

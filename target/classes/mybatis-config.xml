@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <properties resource='mysql.jdbc.properties'/>
+
+    <settings>
+        <!-- instead of setting here, it is possible to set Configuration properties after creating SqlSessionFactory  -->
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type='JDBC'/>
+            <dataSource type='POOLED'>
+                <property name='driver' value='${jdbc.driverClassName}'/>
+                <property name='url' value='${jdbc.url}'/>
+                <property name='username' value='${jdbc.username}'/>
+                <property name='password' value='${jdbc.password}'/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper class="buscompany.mappers.AdminMapper"/>
+        <mapper class="buscompany.mappers.UserMapper"/>
+        <mapper class="buscompany.mappers.SessionMapper"/>
+        <mapper class="buscompany.mappers.ClientMapper"/>
+        <mapper class="buscompany.mappers.BusMapper"/>
+        <mapper class="buscompany.mappers.TripMapper"/>
+        <mapper class="buscompany.mappers.OrderMapper"/>
+        <mapper class="buscompany.mappers.PlacesMapper"/>
+        <mapper class="buscompany.mappers.DebugMapper"/>
+        <mapper resource="buscompany/mappers/AdminMapper.xml"/>
+        <mapper resource="buscompany/mappers/ClientMapper.xml"/>
+        <mapper resource="buscompany/mappers/TripMapper.xml"/>
+        <mapper resource="buscompany/mappers/OrderMapper.xml"/>
+    </mappers>
+
+</configuration>

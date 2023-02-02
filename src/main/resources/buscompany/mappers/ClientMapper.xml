@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="buscompany.mappers.ClientMapper">
+
+    <resultMap id="resultClient" type="buscompany.model.Client">
+        <id property="id" column="id" />
+        <result property="firstName" column="firstname" />
+        <result property="lastName" column="lastname" />
+        <result property="patronymic" column="patronymic" />
+        <result property="login" column="login" />
+        <result property="password" column="password" />
+        <result property="email" column="email" />
+        <result property="phone" column="phone" />
+    </resultMap>
+
+
+    <select id="getClientByLoginAndPassword" resultMap="resultClient" parameterType="java.lang.String">
+        SELECT `user`.id, firstname, lastname, patronymic, login, `password`, `client`.email, `client`.phone
+        FROM `user`
+        LEFT JOIN `client` ON `client`.id = `user`.id
+        WHERE LOWER(login) = LOWER(#{login}) AND `password` = #{password}
+    </select>
+
+    <select id="getClientById" resultMap="resultClient" parameterType="java.lang.Integer">
+        SELECT `user`.id, firstname, lastname, patronymic, login, `password`, `client`.`email`, `client`.`phone`
+        FROM `user`
+        LEFT JOIN `client` ON `client`.id = `user`.id
+        WHERE `user`.id = #{id};
+    </select>
+
+    <select id="getAllClients" resultMap="resultClient">
+        SELECT `user`.id, firstname, lastname, patronymic, login, `password`, `client`.`email`, `client`.`phone`
+        FROM `user`
+        LEFT JOIN `client` ON `client`.id = `user`.id
+        WHERE user_type = "CLIENT"
+    </select>
+
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="buscompany.mappers.OrderMapper">
+
+    <resultMap id="resultOrder" type="buscompany.model.Order">
+        <id property="id" column="id" />
+        <result property="fromStation" column="fromStation" />
+        <result property="toStation" column="toStation" />
+        <result property="busName" column="busName" />
+        <result property="start" column="start" />
+        <result property="duration" column="duration"/>
+        <result property="price" column="price"/>
+        <result property="totalPrice" column="totalPrice"/>
+        <association property="tripDate" column="{tripID=id_trip, date=date}"
+                     javaType="buscompany.model.TripDate"
+                     select = "buscompany.mappers.TripMapper.selectTripDateByTripIDAndDate"/>
+        <collection property="passengers"
+        column="id"
+                    javaType="java.util.List"
+                    ofType="Passenger"
+                    select="buscompany.mappers.OrderMapper.selectPassengers"/>
+    </resultMap>
+
+    <select id="selectOrderList" resultMap="resultOrder">
+        SELECT * FROM `order`
+        <where>
+            <if test="fromStation != null">
+                AND fromStation LIKE #{fromStation}
+            </if>
+            <if test="toStation != null">
+                AND toStation LIKE #{toStation}
+            </if>
+            <if test="busName != null">
+                AND busName LIKE #{busName}
+            </if>
+            <if test="clientID != 0">
+                AND id_client LIKE #{clientID}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectOrderByOrderID" resultMap="resultOrder" parameterType="java.lang.Integer">
+        SELECT * FROM `order` WHERE id = #{orderID};
+    </select>
+
+</mapper>

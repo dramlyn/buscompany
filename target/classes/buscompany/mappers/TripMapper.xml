@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="buscompany.mappers.TripMapper">
+
+    <resultMap id="resultTrip" type="buscompany.model.Trip">
+        <id property="id" column="id"/>
+        <result property="fromStation" column="fromStation"/>
+        <result property="toStation" column="toStation"/>
+        <result property="start" column="start"/>
+        <result property="duration" column="duration"/>
+        <result property="price" column="price"/>
+        <result property="approved" column="isapproved"/>
+        <association property="bus" column="busName"
+                     javaType="buscompany.model.Bus"
+                     select="buscompany.mappers.BusMapper.getBusByBusName"/>
+        <association property="schedule" column="id"
+                     javaType="buscompany.model.Schedule"
+                     select="buscompany.mappers.TripMapper.selectScheduleByTripID"/>
+        <collection property="dates"
+                    column="id"
+                    javaType="java.util.LinkedList"
+                    ofType="buscompany.model.TripDate"
+                    select="buscompany.mappers.TripMapper.selectTripDatesByTripID"/>
+    </resultMap>
+
+    <select id="selectTripByTripID" resultMap="resultTrip" parameterType="java.lang.Integer">
+        SELECT * FROM `trip` WHERE id = #{tripID};
+    </select>
+
+    <select id="selectTripList" resultMap="resultTrip">
+        SELECT * FROM `trip`
+        <where>
+            <if test="fromStation != null">
+                AND fromStation LIKE #{fromStation}
+            </if>
+            <if test="toStation != null">
+                AND toStation LIKE #{toStation}
+            </if>
+            <if test="busName != null">
+                AND busName LIKE #{busName}
+            </if>
+            <if test="approved">
+                AND isapproved = true
+            </if>
+        </where>
+    </select>
+
+</mapper>
